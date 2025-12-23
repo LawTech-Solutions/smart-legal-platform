@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* عداد المخاطر الدائري */
+    .risk-meter {
+        width: 150px; height: 150px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; font-weight: bold; margin: 0 auto;
+        border: 10px solid #f3f3f3; transition: all 0.5s;
+    }
+    .risk-high { border-top-color: #dc3545; color: #dc3545; border-width: 12px; }
+    .risk-medium { border-top-color: #ffc107; color: #ffc107; border-width: 12px; }
+    .risk-low { border-top-color: #198754; color: #198754; border-width: 12px; }
+
+    /* بطاقة البند القانوني */
+    .legal-card {
+        border-right: 5px solid #0d6efd; transition: transform 0.2s;
+        background: white; border-radius: 8px;
+    }
+    .legal-card:hover {
+        transform: scale(1.01); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* تنسيقات الطباعة (تم تصحيح الأقواس هنا) */
+    @media print {
+        .navbar, .btn, .footer, .no-print, .breadcrumb, header {
+            display: none !important;
+        }
+
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .legal-card {
+            break-inside: avoid;
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+            margin-bottom: 10px !important;
+        }
+
+        body {
+            background-color: white !important;
+            font-size: 12pt;
+        }
+    }
+</style>
+
+<div class="container py-5" dir="rtl">
+    <div class="text-start no-print mb-3">
+        <button onclick="window.print();" class="btn btn-sm btn-outline-dark">
+            <i class="fas fa-print ms-1"></i> طباعة فورية
+        </button>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8 text-end">
+            <h2 class="fw-bold">تقرير تحليل العقد: {{ contract.title }}</h2>
+            <p class="text-muted">تم التحليل بواسطة وحدة الذكاء الاصطناعي القانونية</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="risk-meter {% if contract.risk_score > 70 %}risk-high{% elif contract.risk_score > 30 %}risk-medium{% else %}risk-low{% endif %}">
+                {{ contract.risk_score }}%
+            </div>
+            <p class="mt-2 fw-bold">مؤشر المخاطرة العام</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-12 text-end">
+            <h4 class="mb-4">أهم الثغرات والملاحظات القانونية:</h4>
+
+            {% if contract.analysis_report and contract.analysis_report.issues %}
+                {% for issue in contract.analysis_report.issues %}
+                <div class="card legal-card shadow-sm mb-3 p-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-9 text-end">
+                            <h5 class="text-primary">{{ issue.title }}</h5>
+                            <p class="mb-1 text-dark">{{ issue.description }}</p>
+                            <small class="text-success fw-bold">💡 التوصية: {{ issue.recommendation }}</small>
+                        </div>
+                        <div class="col-md-3 text-start">
+                            <span class="badge {% if issue.severity == 'High' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                خطورة: {{ issue.severity }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center no-print">
+                    جاري عرض النتائج... يرجى الانتظار دقيقة حتى ينتهي النظام من التحليل.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5 no-print">
+        <div class="col-12 text-center">
+            <a href="{% url 'contract_pdf' contract.id %}" class="btn btn-lg btn-success shadow">
+                <i class="fas fa-file-pdf ms-2"></i> تحميل الملف الأصلي
+            </a>
+
+            <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary ms-2 shadow-sm">
+                العودة للوحة التحكم
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

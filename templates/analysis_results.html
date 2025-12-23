@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    :root {
+        --danger-red: #ef4444;
+        --warning-yellow: #f59e0b;
+        --success-green: #10b981;
+        --dark-navy: #0f172a;
+    }
+
+    .results-container { background: #fcfdfe; min-height: 100vh; padding-top: 50px; }
+
+    /* لوحة درجة الأمان (Safety Score) */
+    .score-card {
+        background: white;
+        border-radius: 30px;
+        border: 1px solid #e2e8f0;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+
+    .score-circle {
+        width: 150px; height: 150px;
+        border-radius: 50%;
+        border: 12px solid #f1f5f9;
+        border-top-color: var(--warning-yellow); /* يتغير اللون حسب الدرجة */
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2.5rem; font-weight: 800; color: var(--dark-navy);
+    }
+
+    /* بطاقات الثغرات */
+    .finding-card {
+        border: none;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        transition: 0.3s;
+        border-right: 6px solid #ccc;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .finding-card.high { border-right-color: var(--danger-red); background: #fffafb; }
+    .finding-card.medium { border-right-color: var(--warning-yellow); background: #fffdfa; }
+    .finding-card.safe { border-right-color: var(--success-green); background: #fafffb; }
+
+    .risk-badge {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-weight: bold;
+    }
+    .bg-high { background: rgba(239, 68, 68, 0.1); color: var(--danger-red); }
+    .bg-medium { background: rgba(245, 158, 11, 0.1); color: var(--warning-yellow); }
+
+    .action-bar {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        background: white; padding: 20px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        z-index: 1000;
+    }
+</style>
+
+<div class="results-container" dir="rtl">
+    <div class="container pb-5">
+
+        <div class="row mb-5">
+            <div class="col-lg-4">
+                <div class="score-card h-100">
+                    <h5 class="fw-bold text-muted mb-4">مؤشر أمان العقد</h5>
+                    <div class="score-circle">72%</div>
+                    <p class="small text-muted">تم العثور على 3 ثغرات قانونية تتطلب انتباهك الفوري.</p>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card border-0 rounded-4 p-4 shadow-sm bg-dark text-white h-100 d-flex flex-column justify-content-center">
+                    <h4 class="fw-bold mb-3">ملخص "رادار العقود" 📡</h4>
+                    <p class="opacity-75">عقد توريد الخدمات البرمجية - شركة "س" الناشئة</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <div class="text-center p-3 rounded-4 bg-white bg-opacity-10 flex-fill">
+                            <h3 class="fw-bold mb-0">1</h3>
+                            <span class="x-small">مخاطر عالية</span>
+                        </div>
+                        <div class="text-center p-3 rounded-4 bg-white bg-opacity-10 flex-fill">
+                            <h3 class="fw-bold mb-0">2</h3>
+                            <span class="x-small">تنبيهات متوسطة</span>
+                        </div>
+                        <div class="text-center p-3 rounded-4 bg-white bg-opacity-10 flex-fill">
+                            <h3 class="fw-bold mb-0">15</h3>
+                            <span class="x-small">بنود آمنة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-list-check me-2"></i> تحليل البنود التفصيلي</h5>
+
+        <div class="card finding-card high p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="risk-badge bg-high mb-2 d-inline-block">مخاطر عالية: غرامات التأخير</span>
+                    <h5 class="fw-bold text-dark">البند الرابع: التعويضات غير محدودة</h5>
+                    <p class="text-muted small">هذا البند يفتح الباب لتعويضات تتجاوز قيمة العقد بـ 3 أضعاف، مما يهدد السيولة المالية لشركتك.</p>
+                </div>
+                <div class="text-start">
+                    <button class="btn btn-sm btn-outline-danger">اقتراح تعديل</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card finding-card medium p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="risk-badge bg-medium mb-2 d-inline-block">تنبيه: فض النزاعات</span>
+                    <h5 class="fw-bold text-dark">الاختصاص القضائي غير واضح</h5>
+                    <p class="text-muted small">لم يتم تحديد مدينة التقاضي بوضوح، يفضل تحديد المحاكم التجارية بـ (الرياض/القاهرة) لتقليل التكاليف.</p>
+                </div>
+                <div class="text-start">
+                    <button class="btn btn-sm btn-outline-warning">إضافة مدينة</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card finding-card safe p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="risk-badge bg-success bg-opacity-10 text-success mb-2 d-inline-block">آمن: الملكية الفكرية</span>
+                    <h5 class="fw-bold text-dark">حماية حقوق الملكية</h5>
+                    <p class="text-muted small">هذا البند تمت صياغته باحترافية عالية ويضمن انتقال ملكية الكود للعميل بعد السداد النهائي.</p>
+                </div>
+                <div class="text-start">
+                    <i class="fas fa-check-circle text-success fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="action-bar border-top shadow-lg" dir="rtl">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <p class="mb-0 small fw-bold">هل أنت جاهز للخطوة التالية؟</p>
+            <span class="text-muted x-small">يمكنك تحميل التقرير بصيغة PDF أو إعادة صياغة العقد فوراً.</span>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark px-4 rounded-pill">تحميل التقرير</button>
+            <button class="btn btn-primary px-4 rounded-pill">إصلاح العقد آلياً ✨</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

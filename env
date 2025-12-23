@@ -1,0 +1,10 @@
+SECRET_KEY=django-insecure-your-secret-key-here
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost,SunRise.pythonanywhere.com
+
+EMAIL_HOST_USER=sayedhemdan69@gmail.com
+EMAIL_HOST_PASSWORD=S123456&s
+
+STRIPE_PUBLIC_KEY=pk_test_... (ضع مفتاحك هنا)
+STRIPE_SECRET_KEY=sk_test_... (ضع مفتاحك هنا)
+OPENAI_API_KEY=sk-... (ضع مفتاحك هنا)

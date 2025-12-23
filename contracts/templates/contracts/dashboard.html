@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5" dir="rtl">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="display-5 fw-bold text-primary">مرحباً بك في منصتك القانونية الرقمية</h2>
+            <p class="lead">حلول قانونية متكاملة مدعومة بالذكاء الاصطناعي وتحليل البيانات</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="icon-box mb-3 text-primary"><i class="fas fa-file-contract fa-3x"></i></div>
+                    <h5>تحليل العقود (AI)</h5>
+                    <p class="small text-muted">تحليل قانوني شامل واستخراج الثغرات باستخدام الذكاء الاصطناعي.</p>
+                    <a href="{% url 'create_request' 'analyze' %}" class="btn btn-primary w-100">ابدأ الآن</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm border-info hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="icon-box mb-3 text-info"><i class="fas fa-chart-line fa-3x"></i></div>
+                    <h5 class="text-info">تحليل البيانات القانونية</h5>
+                    <p class="small text-muted">استخدام لغة Python لتحليل أنماط القضايا والبيانات الضخمة إحصائياً.</p>
+                    <a href="{% url 'create_request' 'data_analytics' %}" class="btn btn-info text-white w-100">حلل بياناتك</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="icon-box mb-3 text-success"><i class="fas fa-pen-fancy fa-3x"></i></div>
+                    <h5>صياغة العقود</h5>
+                    <p class="small text-muted">توليد صياغات قانونية محكمة مخصصة حسب طبيعة النشاط التجاري.</p>
+                    <a href="{% url 'create_request' 'generate' %}" class="btn btn-success w-100">اطلب صياغة</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm border-warning hover-shadow transition" style="border-width: 2px;">
+                <div class="card-body text-center">
+                    <div class="icon-box mb-3 text-warning"><i class="fas fa-balance-scale fa-3x"></i></div>
+                    <h5 class="fw-bold text-warning">التحكيم التجاري</h5>
+                    <p class="small text-muted">الدقة والاحترافية في صياغة شرط ومشارطة التحكيم وتغطية الجوانب القانونية.</p>
+                    <a href="{% url 'create_request' 'arbitration' %}" class="btn btn-warning w-100">طلب استشارة</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-6">
+            <h4 class="fw-bold mb-0 text-dark"><i class="fas fa-history ms-2"></i>سجل طلباتك الأخيرة</h4>
+        </div>
+        <div class="col-md-6 text-md-start text-center mt-3 mt-md-0">
+            <a href="{% url 'download_all_zip' %}" class="btn btn-outline-primary shadow-sm border-2">
+                <i class="fas fa-file-archive ms-1"></i> تحميل أرشيف ملفاتي (ZIP)
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 text-end">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>عنوان الطلب</th>
+                            <th>نوع الخدمة</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contract in contracts %}
+                        <tr>
+                            <td class="fw-bold text-dark">{{ contract.title }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ contract.get_service_type_display }}</span></td>
+                            <td>{{ contract.created_at|date:"Y-m-d" }}</td>
+                            <td>
+                                {% if contract.status == 'paid' %}
+                                <span class="badge bg-success-soft text-success p-2"><i class="fas fa-check-circle ms-1"></i> مكتمل</span>
+                                {% else %}
+                                <span class="badge bg-warning-soft text-warning p-2">قيد المعالجة</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'contract_detail' contract.id %}" class="btn btn-sm btn-primary px-3">فتح التقرير</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="fas fa-folder-open fa-3x mb-3 d-block text-secondary"></i>
+                                لا يوجد طلبات سابقة حتى الآن. ابدأ بطلب خدمة من الأعلى.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .transition { transition: all 0.3s ease-in-out; }
+    .hover-shadow:hover { transform: translateY(-8px); box-shadow: 0 1rem 3rem rgba(0,0,0,.1)!important; }
+    .bg-success-soft { background-color: #e8f5e9; border: 1px solid #c8e6c9; }
+    .bg-warning-soft { background-color: #fffde7; border: 1px solid #fff9c4; }
+    .icon-box { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .table thead th { border: none; padding: 15px; }
+    .table tbody td { vertical-align: middle; padding: 15px; }
+</style>
+{% endblock %}

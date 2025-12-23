@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="fas fa-file-signature me-2"></i> تفاصيل الطلب: {{ contract.title }}</h4>
+                    <span class="badge bg-light text-primary">{{ contract.get_service_type_display }}</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-secondary border-bottom pb-2">نتائج التحليل الأولي</h5>
+                    <div class="bg-light p-4 rounded mb-4" style="white-space: pre-wrap; line-height: 1.8;">
+                        {% if contract.ai_analysis %}
+                            {{ contract.ai_analysis }}
+                        {% else %}
+                            <p class="text-muted text-center italic">جاري معالجة البيانات من قبل النظام...</p>
+                        {% endif %}
+                    </div>
+
+                    <h5 class="text-secondary border-bottom pb-2">ملاحظات المستخدم</h5>
+                    <p class="p-3 bg-white border rounded text-muted">
+                        {{ contract.user_notes|default:"لا توجد ملاحظات إضافية." }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 mb-4 text-center">
+                <div class="card-body">
+                    <i class="fas fa-user-shield fa-4x text-success mb-3"></i>
+                    <h5>حالة الملف: <span class="text-success">آمن ومحفوظ</span></h5>
+                    <hr>
+                    <p class="small text-muted">تاريخ الرفع: {{ contract.created_at|date:"Y-m-d H:i" }}</p>
+                    <a href="{{ contract.file.url }}" class="btn btn-outline-primary w-100 mb-2" download>
+                        <i class="fas fa-download me-1"></i> تحميل الملف الأصلي
+                    </a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary w-100">
+                        <i class="fas fa-arrow-right me-1"></i> العودة للوحة التحكم
+                    </a>
+                </div>
+            </div>
+
+            <div class="alert alert-info shadow-sm border-0">
+                <h6><i class="fas fa-lightbulb me-2"></i> معلومة قانونية</h6>
+                <p class="small mb-0">تأكد دائماً أن شروط التحكيم تتضمن (القانون الواجب التطبيق، ومكان التحكيم، ولغة التحكيم) لضمان سرعة الفصل في النزاع.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #f8f9fa; }
+    .card { border-radius: 12px; }
+    .bg-primary { background: linear-gradient(45deg, #1a237e, #0d47a1) !important; }
+</style>
+{% endblock %}

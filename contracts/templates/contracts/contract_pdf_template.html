@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4; margin: 1cm; }
+        body { font-family: 'Arial', sans-serif; direction: rtl; text-align: right; }
+        .header { text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .section { margin-top: 20px; }
+        .title { color: #007bff; font-size: 18px; font-weight: bold; }
+        .content { margin-top: 10px; line-height: 1.6; }
+        .footer { margin-top: 50px; text-align: center; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>تقرير فحص قانوني رقم #{{ contract.id }}</h1>
+        <p>تاريخ الفحص: {{ contract.created_at|date:"Y/m/d" }}</p>
+    </div>
+
+    <div class="section">
+        <p class="title">عنوان الطلب:</p>
+        <p class="content">{{ contract.title }}</p>
+    </div>
+
+    <div class="section">
+        <p class="title">التحليل القانوني والنتائج:</p>
+        <div class="content">
+            {{ contract.analysis_result|linebreaks }}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>هذا التقرير تم توليده آلياً عبر المنصة القانونية الذكية</p>
+    </div>
+</body>
+</html>
